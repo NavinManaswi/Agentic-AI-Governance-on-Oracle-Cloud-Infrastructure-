@@ -1,0 +1,11 @@
+# ============================================================================
+# Terraform Variables Example
+# Copy this file to terraform.tfvars and update with your values
+# ============================================================================
+
+tenancy_ocid           = "ocid1.tenancy.oc1..xxxxx"
+region                 = "us-phoenix-1"
+environment            = "dev"
+object_storage_namespace = "your-namespace"
+function_image         = "iad.ocir.io/your-namespace/agent-policy-engine:latest"
+notification_email     = "your-email@example.com"
