@@ -1,0 +1,300 @@
+{
+  "frameworkName": "Agentic AI Governance Framework (CSA ATF + OWASP) on OCI",
+  "frameworkDescription": "Automated evidence collection for agentic AI governance aligned with CSA Agentic Trust Framework and OWASP Agentic Top 10 2026 on Oracle Cloud Infrastructure",
+  "frameworkType": "Standard",
+  "oracleCloudServices": {
+    "identity": "OCI IAM + Deny-by-default policies",
+    "governance": "OCI Generative AI Agents + AI Guardrails",
+    "security": "Zero Trust Packet Routing (ZPR) + VCN",
+    "observability": "OCI Logging + OCI Monitoring + OpenTelemetry"
+  },
+  "controlSets": [
+    {
+      "name": "Identity & Access (CSA ATF Element 1)",
+      "oracleServices": ["OCI IAM", "Deny-by-default policies"],
+      "controls": [
+        {
+          "id": "IDENTITY-001",
+          "name": "Agent Identity Verification",
+          "description": "All agents must have verified IAM identities",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE resource_type = 'agent' AND event_type = 'identity_verification'"
+              }
+            }
+          ]
+        },
+        {
+          "id": "IDENTITY-002",
+          "name": "Deny-by-Default IAM Policies",
+          "description": "IAM policies must enforce deny-by-default",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_IAM",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_iam_policies WHERE statement LIKE '%deny%' AND principal_type = 'agent'"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Authorization (CSA ATF Element 2)",
+      "oracleServices": ["OCI IAM", "Zero Trust Packet Routing"],
+      "controls": [
+        {
+          "id": "AUTHZ-001",
+          "name": "IAM Policy Enforcement",
+          "description": "IAM policies must be enforced for all agent actions",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE resource_type = 'agent' AND event_type = 'policy_evaluation'"
+              }
+            }
+          ]
+        },
+        {
+          "id": "AUTHZ-002",
+          "name": "Zero Trust Packet Routing",
+          "description": "ZPR must enforce identity-based communication",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE service = 'zpr' AND event_type = 'policy_evaluation'"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Runtime Governance (CSA ATF Element 3)",
+      "oracleServices": ["OCI Generative AI Agents", "AI Guardrails"],
+      "controls": [
+        {
+          "id": "RUNTIME-001",
+          "name": "AI Guardrails Enforcement",
+          "description": "AI Guardrails must be enforced for all agent interactions",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE service = 'generative_ai' AND event_type = 'guardrail_evaluation'"
+              }
+            }
+          ]
+        },
+        {
+          "id": "RUNTIME-002",
+          "name": "Content Moderation (CM)",
+          "description": "Content Moderation must be enabled",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE service = 'generative_ai' AND event_type = 'content_moderation'"
+              }
+            }
+          ]
+        },
+        {
+          "id": "RUNTIME-003",
+          "name": "Prompt Injection Protection (PI)",
+          "description": "Prompt Injection protection must be enabled",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE service = 'generative_ai' AND event_type = 'prompt_injection'"
+              }
+            }
+          ]
+        },
+        {
+          "id": "RUNTIME-004",
+          "name": "PII Protection",
+          "description": "PII protection must be enabled",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE service = 'generative_ai' AND event_type = 'pii_detection'"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Observability (CSA ATF Element 4)",
+      "oracleServices": ["OCI Logging", "OCI Monitoring", "OpenTelemetry"],
+      "controls": [
+        {
+          "id": "OBSERVE-001",
+          "name": "Centralized Logging",
+          "description": "All agent actions must be logged to OCI Logging",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE resource_type = 'agent'"
+              }
+            }
+          ]
+        },
+        {
+          "id": "OBSERVE-002",
+          "name": "Metric Monitoring",
+          "description": "Key metrics must be monitored",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Monitoring",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_monitoring WHERE resource_type = 'agent'"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Data Boundaries (CSA ATF Element 5)",
+      "oracleServices": ["VCN", "Private Endpoints", "OCI Object Storage"],
+      "controls": [
+        {
+          "id": "DATA-001",
+          "name": "Network Isolation",
+          "description": "VCN must isolate agent traffic",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE service = 'vcn' AND resource_type = 'agent'"
+              }
+            }
+          ]
+        },
+        {
+          "id": "DATA-002",
+          "name": "Data Retention",
+          "description": "Logs must be retained for 10 years",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE retention_duration >= 3650"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OWASP Agentic Top 10 2026",
+      "controls": [
+        {
+          "id": "OWASP-001",
+          "name": "ASI01 — Agent Goal Hijack",
+          "description": "Prevent goal hijacking using Prompt Injection guardrails",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE service = 'generative_ai' AND event_type = 'prompt_injection' AND action = 'BLOCK'"
+              }
+            }
+          ]
+        },
+        {
+          "id": "OWASP-002",
+          "name": "ASI02 — Tool Misuse",
+          "description": "Prevent tool misuse using IAM policies",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE service = 'iam' AND event_type = 'policy_denied' AND principal_type = 'agent'"
+              }
+            }
+          ]
+        },
+        {
+          "id": "OWASP-003",
+          "name": "ASI03 — Identity & Privilege Abuse",
+          "description": "Prevent identity abuse using deny-by-default IAM",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE service = 'iam' AND event_type = 'unauthorized_access' AND principal_type = 'agent'"
+              }
+            }
+          ]
+        },
+        {
+          "id": "OWASP-004",
+          "name": "ASI04 — Resource Exhaustion",
+          "description": "Prevent resource exhaustion using OCI Monitoring",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Monitoring",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_monitoring WHERE metric_name LIKE '%resource%' AND resource_type = 'agent'"
+              }
+            }
+          ]
+        },
+        {
+          "id": "OWASP-005",
+          "name": "ASI05 — Unexpected Code Execution",
+          "description": "Prevent code execution using Content Moderation",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE service = 'generative_ai' AND event_type = 'content_moderation' AND action = 'BLOCK'"
+              }
+            }
+          ]
+        },
+        {
+          "id": "OWASP-006",
+          "name": "ASI06 — Memory & Context Poisoning",
+          "description": "Prevent memory poisoning using PII protection",
+          "evidenceSources": [
+            {
+              "sourceType": "OCI_Logging",
+              "sourceKeyword": {
+                "keywordInputType": "SELECT",
+                "keywordValue": "SELECT * FROM oci_logging WHERE service = 'generative_ai' AND event_type = 'pii_detection' AND action = 'REDACT'"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
