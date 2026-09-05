@@ -1,0 +1,37 @@
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+*.pyc
+__pycache__/
+venv/
+env/
+.pytest_cache/
+*.pyo
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+terraform.tfstate.backup
+
+# OCI
+*.key
+*.pem
+*.crt
+*.secrets
+.oci/
+
+# Build artifacts
+*.zip
+*.tar.gz
+dist/
+build/
