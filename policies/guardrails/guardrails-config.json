@@ -1,0 +1,46 @@
+{
+  "guardrailName": "agentic-governance-guardrails",
+  "description": "AI Guardrails for agentic AI governance - CM, PI, PII",
+  "version": "1.1.0",
+  "contentModeration": {
+    "enabled": true,
+    "categories": ["hate", "sexual", "violence", "self-harm"],
+    "threshold": "MEDIUM",
+    "action": "BLOCK"
+  },
+  "promptInjection": {
+    "enabled": true,
+    "detection_mode": "BLOCK",
+    "confidence_threshold": 0.7,
+    "types": ["direct_prompt_injection", "indirect_prompt_injection", "jailbreak"]
+  },
+  "piiProtection": {
+    "enabled": true,
+    "action": "REDACT",
+    "entity_types": [
+      "EMAIL_ADDRESS",
+      "PHONE_NUMBER",
+      "CREDIT_CARD_NUMBER",
+      "US_SOCIAL_SECURITY_NUMBER",
+      "PERSON_NAME",
+      "ADDRESS"
+    ],
+    "redaction_char": "*"
+  },
+  "contextualGrounding": {
+    "enabled": true,
+    "threshold": 0.8,
+    "action": "BLOCK"
+  },
+  "wordFilters": {
+    "enabled": true,
+    "blocked_words": [
+      "privilege escalation",
+      "bypass authorization",
+      "exploit tool",
+      "social engineering",
+      "data exfiltration"
+    ],
+    "action": "BLOCK"
+  }
+}
